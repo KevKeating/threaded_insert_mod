@@ -41,12 +41,17 @@ total_width = x_offsets[num_tips - 1] + tip_diameters[num_tips - 1][0] / 2 + spa
 
 module tip_cylinders() {
     for (i = [0:num_tips - 1]) {
-        knurling_diameter = tip_diameters[i][0];
-        above_knurling_diameter = tip_diameters[i][1];
+        knurling_diameter = tip_diameters[i][0] + knurling_diameter_clearance;
+        above_knurling_diameter = tip_diameters[i][1] + above_knurling_diameter_clearance;
         cur_x_offset = x_offsets[i];
         cur_z_offset = knurling_diameter * center_depth_ratio;
-        translate([cur_x_offset, EXTRA, cur_z_offset])
-            ycyl(d=knurling_diameter, h=knurling_height + knurling_height_clearance + EXTRA, anchor=TOP + BACK);
+        translate([cur_x_offset, EXTRA, cur_z_offset - knurling_diameter / 2]) {
+            ycyl(d=knurling_diameter, h=knurling_height + knurling_height_clearance + EXTRA, anchor=BACK);
+            fwd(knurling_height + knurling_height_clearance)
+                ycyl(d=above_knurling_diameter, h=above_knurling_height + 2 * EXTRA, anchor=BACK)
+                    attach(CENTER)
+                    cuboid([above_knurling_diameter, above_knurling_height + 2 * EXTRA, knurling_diameter], anchor=BOTTOM);
+        }
     }
 }
 
