@@ -28,13 +28,13 @@ rounding = 1;
 
 num_tips = len(tip_diameters);
 
-function if_def(x) = is_undef(x) ? 0 : x;
+function zero_if_undef(x) = is_undef(x) ? 0 : x;
 x_offsets = [
     for (i=0,
             cum_sum=spacing + tip_diameters[0][0] / 2;
          i < num_tips;
          i = i + 1,
-            cum_sum = cum_sum + spacing + tip_diameters[i-1][0] / 2 + if_def(tip_diameters[i][0]) / 2)
+            cum_sum = cum_sum + spacing + tip_diameters[i-1][0] / 2 + zero_if_undef(tip_diameters[i][0]) / 2)
     cum_sum];
 echo(x_offsets=x_offsets);
 total_width = x_offsets[num_tips - 1] + tip_diameters[num_tips - 1][0] / 2 + spacing;
@@ -46,8 +46,10 @@ module tip_cylinders() {
         cur_x_offset = x_offsets[i];
         cur_z_offset = knurling_diameter * center_depth_ratio - knurling_diameter / 2;
         translate([cur_x_offset, EXTRA, cur_z_offset]) {
+            // the cutout for the knurled part of the tip
             ycyl(d=knurling_diameter, h=knurling_height + knurling_height_clearance + EXTRA, anchor=BACK);
             fwd(knurling_height + knurling_height_clearance)
+                // the cutout for the part of the tip just above the knurled portion
                 ycyl(d=above_knurling_diameter, h=above_knurling_height + 2 * EXTRA, anchor=BACK)
                     attach(CENTER)
                     cuboid([above_knurling_diameter, above_knurling_height + 2 * EXTRA, -cur_z_offset + EXTRA],
