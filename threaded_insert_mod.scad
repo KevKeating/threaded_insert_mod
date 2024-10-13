@@ -50,7 +50,8 @@ module tip_cylinders() {
             fwd(knurling_height + knurling_height_clearance)
                 ycyl(d=above_knurling_diameter, h=above_knurling_height + 2 * EXTRA, anchor=BACK)
                     attach(CENTER)
-                    cuboid([above_knurling_diameter, above_knurling_height + 2 * EXTRA, -cur_z_offset + EXTRA], anchor=BOTTOM);
+                    cuboid([above_knurling_diameter, above_knurling_height + 2 * EXTRA, -cur_z_offset + EXTRA],
+                           rounding=-rounding, edges=[TOP + LEFT, TOP + RIGHT], anchor=BOTTOM);
         }
     }
 }
