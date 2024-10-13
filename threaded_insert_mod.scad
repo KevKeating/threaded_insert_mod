@@ -16,11 +16,19 @@ tip_diameters = [
 ];
 knurling_diameter_clearance = 0.2;
 above_knurling_diameter_clearance = 0.25;
-center_depth_ratio = 0.225
+center_depth_ratio = 0.225;
 spacing = 4;
 
 num_tips = len(tip_diameters);
 
+x_offsets = [for (i=0, cum_sum=tip_diameters[0][0]; i < num_tips; i = i + 1, cum_sum = cum_sum + tip_diameters[i][0]) cum_sum];
+echo(x_offsets=x_offsets);
+
+
 module tip_cylinders() {
-    
+    for (i = [0:num_tips - 1]) {
+        knurling_diameter = tip_diameters[i][0];
+        above_knurling_diameter = tip_diameters[i][1];
+        
+    }
 }
