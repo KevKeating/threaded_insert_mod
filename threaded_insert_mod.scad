@@ -21,7 +21,13 @@ spacing = 4;
 
 num_tips = len(tip_diameters);
 
-x_offsets = [for (i=0, cum_sum=tip_diameters[0][0]; i < num_tips; i = i + 1, cum_sum = cum_sum + tip_diameters[i][0]) cum_sum];
+function if_def(x) = is_undef(x) ? 0 : x;
+x_offsets = [
+    for (i=0,
+            cum_sum=spacing + tip_diameters[0][0] / 2;
+         i < num_tips; i = i + 1,
+            cum_sum = cum_sum + spacing + tip_diameters[i-1][0] / 2 + if_def(tip_diameters[i][0]) / 2)
+    cum_sum];
 echo(x_offsets=x_offsets);
 
 
