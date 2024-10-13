@@ -21,7 +21,10 @@ tip_diameters = [
 knurling_diameter_clearance = 0.2;
 above_knurling_diameter_clearance = 0.25;
 center_depth_ratio = 0.225;
+bottom_thickness = 1;
+total_depth = bottom_thickness + max([for (tip = tip_diameters) tip[0]]) * (1 - center_depth_ratio);
 spacing = 4;
+rounding = 1;
 
 num_tips = len(tip_diameters);
 
@@ -48,6 +51,10 @@ module tip_cylinders() {
 }
 
 difference() {
-    cuboid([total_width, knurling_height + knurling_height_clearance + above_knurling_height, 10], anchor=TOP + BACK + LEFT);
+    cuboid(
+        [total_width, knurling_height + knurling_height_clearance + above_knurling_height, total_depth],
+        rounding=rounding,
+        edges=[LEFT + FRONT + TOP, RIGHT + FRONT + TOP],
+        anchor=TOP + BACK + LEFT);
     tip_cylinders();
 }
