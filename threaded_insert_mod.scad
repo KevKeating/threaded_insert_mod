@@ -62,11 +62,13 @@ module tip_cylinders() {
         }
         // round where the knurling cutout meets the top of the cube
         for (rounding_sign = [-1, 1]) {
-            #translate([cur_x_offset + rounding_sign * rounding_x_offset, EXTRA, 0])
-                yrot(rounding_sign * -rounding_cube_angle)
-                cuboid([rounding_cube_size, knurling_height + knurling_height_clearance + EXTRA, rounding_cube_size], anchor=BACK + BOTTOM + rounding_sign * RIGHT);
-            #translate([cur_x_offset + rounding_sign * rounding_x_offset, EXTRA, -rounding])
-                ycyl(r=rounding, h=knurling_height + knurling_height_clearance + EXTRA, anchor=BACK);
+            difference() {
+                translate([cur_x_offset + rounding_sign * rounding_x_offset, EXTRA, 0])
+                    yrot(rounding_sign * -rounding_cube_angle)
+                    cuboid([rounding_cube_size, knurling_height + knurling_height_clearance + EXTRA, rounding_cube_size], anchor=BACK + BOTTOM + rounding_sign * RIGHT);
+                translate([cur_x_offset + rounding_sign * rounding_x_offset, EXTRA, -rounding])
+                    ycyl(r=rounding, h=knurling_height + knurling_height_clearance + EXTRA, anchor=BACK);
+            }
         }
     }
 }
