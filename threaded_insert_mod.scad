@@ -37,7 +37,6 @@ x_offsets = [
          i = i + 1,
             cum_sum = cum_sum + spacing + tip_diameters[i-1][0] / 2 + default(tip_diameters[i][0], 0) / 2)
     cum_sum];
-echo(x_offsets=x_offsets);
 total_width = x_offsets[num_tips - 1] + tip_diameters[num_tips - 1][0] / 2 + spacing;
 
 module tip_cylinders() {
