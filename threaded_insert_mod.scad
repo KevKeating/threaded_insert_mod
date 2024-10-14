@@ -24,7 +24,7 @@ center_depth_ratio = 0.225;
 bottom_thickness = 1;
 total_depth = bottom_thickness + max([for (tip = tip_diameters) tip[0]]) * (1 - center_depth_ratio);
 spacing = 4;
-rounding = 1;
+rounding = 0.5;
 
 num_tips = len(tip_diameters);
 
@@ -45,7 +45,7 @@ module tip_cylinders() {
         above_knurling_diameter = tip_diameters[i][1] + above_knurling_diameter_clearance;
         cur_x_offset = x_offsets[i];
         cur_z_offset = knurling_diameter * center_depth_ratio - knurling_diameter / 2;
-        rounding_x_offset = sqrt((1 - center_depth_ratio^2) * knurling_diameter ^ 2 + (2 + 2 * center_depth_ratio) * knurling_diameter * rounding);
+        rounding_x_offset = sqrt((knurling_diameter / 2 + rounding)^2 - (cur_z_offset - rounding)^2) + rounding;
         translate([cur_x_offset, EXTRA, cur_z_offset]) {
             // the cutout for the knurled part of the tip
             ycyl(d=knurling_diameter, h=knurling_height + knurling_height_clearance + EXTRA, anchor=BACK);
@@ -53,11 +53,13 @@ module tip_cylinders() {
             fwd(knurling_height + knurling_height_clearance)
                 ycyl(d=above_knurling_diameter, h=above_knurling_height + 2 * EXTRA, anchor=BACK)
                     attach(CENTER)
+                    // round where this cutout meets the top-front corner
                     cuboid([above_knurling_diameter, above_knurling_height + 2 * EXTRA, -cur_z_offset + EXTRA],
                            rounding=-rounding, edges=[TOP + LEFT, TOP + RIGHT], anchor=BOTTOM);
         }
+        // round where the knurling cutout meets the top of the cube
         for (rounding_sign = [-1, 1])
-            translate([cur_x_offset + rounding_sign * rounding_x_offset, 0, -rounding])
+            translate([cur_x_offset + rounding_sign * rounding_x_offset, EXTRA, -rounding])
             #ycyl(r=rounding, h=knurling_height + knurling_height_clearance + EXTRA, anchor=BACK);
     }
 }
