@@ -54,20 +54,10 @@ module tip_cylinders() {
             ycyl(d=knurling_diameter, h=knurling_height + knurling_height_clearance + EXTRA, anchor=BACK);
             // the cutout for the part of the tip just above the knurled portion
             fwd(knurling_height + knurling_height_clearance)
-                diff() {
-                    ycyl(d=above_knurling_diameter, h=above_knurling_height + 2 * EXTRA, anchor=BACK)
-                        attach(CENTER)
-                        cuboid([above_knurling_diameter, above_knurling_height + 2 * EXTRA, -cur_z_offset + EXTRA],
-                            //    rounding=-rounding, edges=[TOP + LEFT, TOP + RIGHT], anchor=BOTTOM);
-                            anchor=BOTTOM) {
-                                position(TOP + LEFT + FRONT)
-                                    cuboid(rounding + EXTRA, anchor=TOP + RIGHT + FRONT);
-                                position(TOP + LEFT + FRONT)
-                                    tag("remove")
-                                    translate([-rounding, rounding, -rounding])
-                                    sphere(r=rounding);
-                            }
-                }
+                ycyl(d=above_knurling_diameter, h=above_knurling_height + 2 * EXTRA, anchor=BACK)
+                    attach(CENTER)
+                    cuboid([above_knurling_diameter, above_knurling_height + 2 * EXTRA, -cur_z_offset + EXTRA],
+                           rounding=-rounding, edges=[TOP + LEFT, TOP + RIGHT], anchor=BOTTOM);
         }
         // round where the knurling cutout meets the top of the cube
         for (rounding_sign = [-1, 1]) {
