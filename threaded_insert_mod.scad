@@ -5,7 +5,7 @@ $fn = $preview ? 24 : 48 * 4;
 EXTRA = 0.01 + 0;
 
 knurling_height = 8.5;
-knurling_height_clearance = 0.2;
+knurling_height_clearance = 0.75;
 above_knurling_height = 2;
 
 // knurling diameter, diameter above knurling
@@ -18,13 +18,14 @@ tip_diameters = [
     [7, 4.6],
     [9, 6.2],
 ];
-knurling_diameter_clearance = 0.2;
-above_knurling_diameter_clearance = 0.25;
-center_depth_ratio = 0.225;
+knurling_diameter_clearance = 0.3;
+above_knurling_diameter_clearance = 0.3;
+center_depth_ratio = 0.25;
 bottom_thickness = 1;
 total_depth = bottom_thickness + max([for (tip = tip_diameters) tip[0]]) * (1 - center_depth_ratio);
 spacing = 4;
-rounding = 0.5;
+rounding = 0.75;
+extra_block_size = 2;
 
 num_tips = len(tip_diameters);
 
@@ -73,10 +74,11 @@ module tip_cylinders() {
 }
 
 difference() {
-    cuboid(
-        [total_width, knurling_height + knurling_height_clearance + above_knurling_height, total_depth],
-        rounding=rounding,
-        edges=[LEFT + FRONT + TOP, RIGHT + FRONT + TOP],
-        anchor=TOP + BACK + LEFT);
+    back(extra_block_size)
+        cuboid(
+            [total_width, knurling_height + knurling_height_clearance + above_knurling_height + extra_block_size, total_depth + extra_block_size],
+            rounding=rounding,
+            edges=[LEFT + FRONT + TOP, RIGHT + FRONT + TOP],
+            anchor=TOP + BACK + LEFT);
     tip_cylinders();
 }
