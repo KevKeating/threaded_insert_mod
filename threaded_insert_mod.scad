@@ -11,10 +11,10 @@ above_knurling_height = 2;
 // knurling diameter, diameter above knurling, optional: knurling diameter clearance, knurling_height_clearance, center depth ratio
 tip_diameters = [
     [7, 3.2, 0.3, 0.9],
-    [7, 3.2],
-    [7, 4.7],
+    [7, 3.2, 0.3, 0.9],
+    [7, 4.7, 0.225, 0.85],
     [7, 5.6],
-    [7, 6.4],
+    [7, 6.4], // TODO: reduce above_knurling_diameter_clearance to 0.2 for this one
     [7, 4.6],
     [9, 6.2, 0.3, 1.15, 0.25],
 ];
