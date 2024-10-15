@@ -11,6 +11,11 @@ default_knurling_diameter_clearance = 0.2;
 default_above_knurling_diameter_clearance = 0.3;
 default_center_depth_ratio = 0.23;
 
+bottom_thickness = 1;
+spacing = 4;
+rounding = 0.75;
+extra_block_size = 2;
+
 function Tip(name,
              knurling_diameter,
              diameter_above_knurling,
@@ -27,8 +32,15 @@ function Tip(name,
                "knurling_height_clearance", knurling_height_clearance,
                "center_depth_ratio", center_depth_ratio,
             ]);
+NAME = "name";
+KNURLING_DIAMETER = "knurling_diameter";
+DIAMETER_ABOVE_KNURLING = "diameter_above_knurling";
+KNURLING_DIAMETER_CLEARANCE = "knurling_diameter_clearance";
+ABOVE_KNURLING_DIAMETER_CLEARANCE = "above_knurling_diameter_clearance";
+KNURLING_HEIGHT_CLEARANCE = "knurling_height_clearance";
+CENTER_DEPTH_RATIO = "center_depth_ratio";
 
-tip_settings = [
+tip_info = [
     Tip(7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=0.9),
     Tip(7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=0.9),
     Tip(7, 4.7, knurling_diameter_clearance=0.225, knurling_height_clearance=0.85),
@@ -38,30 +50,26 @@ tip_settings = [
     Tip(9, 6.2, knurling_diameter_clearance=0.3, knurling_height_clearance=1.15, center_depth_ratio=0.25),
 ];
 
-bottom_thickness = 1;
-spacing = 4;
-rounding = 0.75;
-extra_block_size = 2;
 
-num_tips = len(tip_diameters);
-total_depth = bottom_thickness + max([for (tip = tip_settings) struct_get(tip, "knurling_diameter") * (1 - default(tip[4], default_center_depth_ratio))]);
-max_knurling_height_clearance = max([for (tip = tip_diameters) default(tip[3], default_knurling_height_clearance)]);
+num_tips = len(tip_info);
+total_depth = bottom_thickness + max([for (tip = tip_info) struct_val(tip, KNURLING_DIAMETER) * (1 - struct_val(tip, DEFAULT_CENTER_DEPTH_RATIO))]);
+max_knurling_height_clearance = max([for (tip = tip_info) struct_val(tip, KNURLING_HEIGHT_CLEARANCE)]);
 
 x_offsets = [
     for (i=0,
-            cum_sum=spacing + tip_diameters[0][0] / 2;
+            cum_sum=spacing + struct_val(tip_info[0], KNURLING_DIAMETER) / 2;
          i < num_tips;
          i = i + 1,
-            cum_sum = cum_sum + spacing + tip_diameters[i-1][0] / 2 + default(tip_diameters[i][0], 0) / 2)
+            cum_sum = cum_sum + spacing + struct_val(tip_info[i-1], KNURLING_DIAMETER) / 2 + struct_val(tip_info[i], KNURLING_DIAMETER, 0) / 2)
     cum_sum];
-total_width = x_offsets[num_tips - 1] + tip_diameters[num_tips - 1][0] / 2 + spacing;
+total_width = x_offsets[num_tips - 1] + tip_info[num_tips - 1][0] / 2 + spacing;
 
 module tip_cylinders() {
     for (i = [0:num_tips - 1]) {
-        knurling_diameter = tip_diameters[i][0] + default(tip_diameters[i][2], default_knurling_diameter_clearance);
-        above_knurling_diameter = tip_diameters[i][1] + above_knurling_diameter_clearance;
-        knurling_height_clearance = default(tip_diameters[i][3], default_knurling_height_clearance);
-        center_depth_ratio = default(tip_diameters[i][4], default_center_depth_ratio);
+        knurling_diameter = struct_val(tip_info[i], KNURLING_DIAMETER) + struct_val(tip_info[i], KNURLING_DIAMETER_CLEARANCE);
+        above_knurling_diameter = struct_val(tip_info[i], DIAMETER_ABOVE_KNURLING) + struct_val(tip_info[i], ABOVE_KNURLING_DIAMETER_CLEARANCE);
+        knurling_height_clearance = struct_val(tip_info[i], KNURLING_HEIGHT_CLEARANCE);
+        center_depth_ratio = struct_val(tip_info[i], CENTER_DEPTH_RATIO);
         cur_x_offset = x_offsets[i];
         cur_y_offset = max_knurling_height_clearance - knurling_height_clearance;
         cur_z_offset = knurling_diameter / 2 - knurling_diameter * center_depth_ratio;
