@@ -18,14 +18,15 @@ function Tip(name,
              above_knurling_diameter_clearance=default_above_knurling_diameter_clearance,
              knurling_height_clearance=default_knurling_height_clearance,
              center_depth_ratio=default_center_depth_ratio) =
-    struct_set([],
+    struct_set([], [
                "name", name,
                "knurling_diameter", knurling_diameter,
                "diameter_above_knurling", diameter_above_knurling,
                "knurling_diameter_clearance", knurling_diameter_clearance,
                "above_knurling_diameter_clearance", above_knurling_diameter_clearance,
                "knurling_height_clearance", knurling_height_clearance,
-               "center_depth_ratio", center_depth_ratio);
+               "center_depth_ratio", center_depth_ratio,
+            ]);
 
 tip_settings = [
     Tip(7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=0.9),
