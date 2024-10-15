@@ -7,28 +7,44 @@ EXTRA = 0.01 + 0;
 knurling_height = 8.5;
 default_knurling_height_clearance = 0.75;
 above_knurling_height = 2;
-
-// knurling diameter, diameter above knurling, optional: knurling diameter clearance, knurling_height_clearance, center depth ratio
-tip_diameters = [
-    [7, 3.2, 0.3, 0.9],
-    [7, 3.2, 0.3, 0.9],
-    [7, 4.7, 0.225, 0.85],
-    [7, 5.6],
-    [7, 6.4], // TODO: reduce above_knurling_diameter_clearance to 0.2 for this one
-    [7, 4.6],
-    [9, 6.2, 0.3, 1.15, 0.25],
-];
 default_knurling_diameter_clearance = 0.2;
-above_knurling_diameter_clearance = 0.3;
+default_above_knurling_diameter_clearance = 0.3;
 default_center_depth_ratio = 0.23;
+
+function Tip(name,
+             knurling_diameter,
+             diameter_above_knurling,
+             knurling_diameter_clearance=default_knurling_diameter_clearance,
+             above_knurling_diameter_clearance=default_above_knurling_diameter_clearance,
+             knurling_height_clearance=default_knurling_height_clearance,
+             center_depth_ratio=default_center_depth_ratio) =
+    struct_set([],
+               "name", name,
+               "knurling_diameter", knurling_diameter,
+               "diameter_above_knurling", diameter_above_knurling,
+               "knurling_diameter_clearance", knurling_diameter_clearance,
+               "above_knurling_diameter_clearance", above_knurling_diameter_clearance,
+               "knurling_height_clearance", knurling_height_clearance,
+               "center_depth_ratio", center_depth_ratio);
+
+tip_settings = [
+    Tip(7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=0.9),
+    Tip(7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=0.9),
+    Tip(7, 4.7, knurling_diameter_clearance=0.225, knurling_height_clearance=0.85),
+    Tip(7, 5.6),
+    Tip(7, 6.4, above_knurling_diameter_clearance=0.2), // TODO: reduce above_knurling_diameter_clearance to 0.2 for this one
+    Tip(7, 4.6),
+    Tip(9, 6.2, knurling_diameter_clearance=0.3, knurling_height_clearance=1.15, center_depth_ratio=0.25),
+];
+
 bottom_thickness = 1;
-total_depth = bottom_thickness + max([for (tip = tip_diameters) tip[0] * (1 - default(tip[4], default_center_depth_ratio))]);
-max_knurling_height_clearance = max([for (tip = tip_diameters) default(tip[3], default_knurling_height_clearance)]);
 spacing = 4;
 rounding = 0.75;
 extra_block_size = 2;
 
 num_tips = len(tip_diameters);
+total_depth = bottom_thickness + max([for (tip = tip_settings) struct_get(tip, "knurling_diameter") * (1 - default(tip[4], default_center_depth_ratio))]);
+max_knurling_height_clearance = max([for (tip = tip_diameters) default(tip[3], default_knurling_height_clearance)]);
 
 x_offsets = [
     for (i=0,
