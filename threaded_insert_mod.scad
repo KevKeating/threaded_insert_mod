@@ -32,6 +32,18 @@ function Tip(name,
                "knurling_height_clearance", knurling_height_clearance,
                "center_depth_ratio", center_depth_ratio,
             ]);
+
+tip_info = [
+    Tip("M2", 7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=0.9),
+    Tip("M2.5", 7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=0.9),
+    Tip("M3", 7, 4.7, knurling_diameter_clearance=0.225, knurling_height_clearance=0.85),
+    Tip("M4", 7, 5.6),
+    Tip("M5", 7, 6.4, above_knurling_diameter_clearance=0.2),
+    Tip("M6", 7, 4.6),
+    Tip("M8", 9, 6.2, knurling_diameter_clearance=0.3, knurling_height_clearance=1.15, center_depth_ratio=0.25),
+];
+
+/* [Hidden] */
 NAME = "name";
 KNURLING_DIAMETER = "knurling_diameter";
 DIAMETER_ABOVE_KNURLING = "diameter_above_knurling";
@@ -40,19 +52,8 @@ ABOVE_KNURLING_DIAMETER_CLEARANCE = "above_knurling_diameter_clearance";
 KNURLING_HEIGHT_CLEARANCE = "knurling_height_clearance";
 CENTER_DEPTH_RATIO = "center_depth_ratio";
 
-tip_info = [
-    Tip(7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=0.9),
-    Tip(7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=0.9),
-    Tip(7, 4.7, knurling_diameter_clearance=0.225, knurling_height_clearance=0.85),
-    Tip(7, 5.6),
-    Tip(7, 6.4, above_knurling_diameter_clearance=0.2), // TODO: reduce above_knurling_diameter_clearance to 0.2 for this one
-    Tip(7, 4.6),
-    Tip(9, 6.2, knurling_diameter_clearance=0.3, knurling_height_clearance=1.15, center_depth_ratio=0.25),
-];
-
-
 num_tips = len(tip_info);
-total_depth = bottom_thickness + max([for (tip = tip_info) struct_val(tip, KNURLING_DIAMETER) * (1 - struct_val(tip, DEFAULT_CENTER_DEPTH_RATIO))]);
+total_depth = bottom_thickness + max([for (tip = tip_info) struct_val(tip, KNURLING_DIAMETER) * (1 - struct_val(tip, CENTER_DEPTH_RATIO))]);
 max_knurling_height_clearance = max([for (tip = tip_info) struct_val(tip, KNURLING_HEIGHT_CLEARANCE)]);
 
 x_offsets = [
@@ -62,7 +63,7 @@ x_offsets = [
          i = i + 1,
             cum_sum = cum_sum + spacing + struct_val(tip_info[i-1], KNURLING_DIAMETER) / 2 + struct_val(tip_info[i], KNURLING_DIAMETER, 0) / 2)
     cum_sum];
-total_width = x_offsets[num_tips - 1] + tip_info[num_tips - 1][0] / 2 + spacing;
+total_width = x_offsets[num_tips - 1] + struct_val(tip_info[num_tips - 1], KNURLING_DIAMETER) / 2 + spacing;
 
 module tip_cylinders() {
     for (i = [0:num_tips - 1]) {
@@ -109,3 +110,4 @@ difference() {
             anchor=TOP + BACK + LEFT);
     tip_cylinders();
 }
+// TODO: add labels - do it here so we can use a lazy union and have a separate object
