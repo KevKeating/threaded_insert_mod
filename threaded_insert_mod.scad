@@ -12,12 +12,12 @@ default_above_knurling_diameter_clearance = 0.3;
 default_center_depth_ratio = 0.23;
 
 bottom_thickness = 1;
-spacing = 4;
+spacing = 5.5;
 rounding = 0.75;
 extra_block_size = 1;
-label_y = -9;
+label_y = -11;
 label_font = "DejaVu Sans";
-label_size = 2.5;
+label_size = 3.25;
 
 function Tip(name,
              knurling_diameter,
@@ -118,6 +118,7 @@ module labels() {
         translate([cur_x_offset, label_y])
             text3d(label_text, h=0.5, spin=90, atype="ycenter", font=label_font, size=label_size, anchor=LEFT + BOTTOM);
     }
+    // TODO: cylinder for larger decimal point?
 }
 
 difference() {
@@ -129,5 +130,5 @@ difference() {
             anchor=TOP + BACK + LEFT);
     tip_cylinders();
 }
-color("white")
+color("black")
     labels();
