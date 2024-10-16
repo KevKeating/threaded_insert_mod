@@ -121,6 +121,13 @@ module labels() {
     // TODO: cylinder for larger decimal point?
 }
 
+
+difference() {
+    translate([-350, 0, 0])
+        import("Tools Container.stl", convexity=10, $fn=$fn);
+    translate([132, -3.58, 9.615])
+        cuboid([80, 32.25, 15], rounding=3, edges=BACK + RIGHT);
+}
 difference() {
     back(extra_block_size)
         cuboid(
