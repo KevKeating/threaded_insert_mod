@@ -15,8 +15,8 @@ bottom_thickness = 1;
 spacing = 4;
 rounding = 0.75;
 extra_block_size = 1;
-label_y = -8.5;
-label_font = "Bahnschrift";
+label_y = -9;
+label_font = "DejaVu Sans";
 label_size = 2.5;
 
 function Tip(name,
