@@ -14,7 +14,7 @@ default_center_depth_ratio = 0.23;
 bottom_thickness = 1;
 spacing = 5.5;
 rounding = 0.75;
-extra_block_size = 1;
+extra_block_size = 0.25;
 label_y = -11;
 label_font = "DejaVu Sans";
 label_size = 3.25;
@@ -128,14 +128,23 @@ difference() {
     translate([132, -3.58, 9.615])
         cuboid([80, 32.25, 15], rounding=3, edges=BACK + RIGHT);
 }
-difference() {
-    back(extra_block_size)
-        cuboid(
-            [total_width, knurling_height + max_knurling_height_clearance + above_knurling_height + extra_block_size, total_depth + extra_block_size],
-            rounding=rounding,
-            edges=[LEFT + FRONT + TOP, RIGHT + FRONT + TOP],
-            anchor=TOP + BACK + LEFT);
-    tip_cylinders();
-}
-color("black")
-    labels();
+translate([80.5, 12.5, 9.5])
+    diff() {
+        back(extra_block_size)
+            cuboid(
+                [total_width, knurling_height + max_knurling_height_clearance + above_knurling_height + extra_block_size, total_depth + extra_block_size],
+                rounding=rounding,
+                edges=[LEFT + FRONT + TOP, RIGHT + FRONT + TOP],
+                anchor=TOP + BACK + LEFT)
+                edge_mask(BACK + RIGHT)
+                    rounding_edge_mask(l=$parent_size.z+EXTRA, r=5);
+        tag("remove")
+            tip_cylinders();
+    }
+translate([80.5, 12.5, 9.5])
+    color("black") {
+        labels();
+        translate([16.5, -3.55, 0])
+            cyl(r=0.5, h=0.5, anchor=BOTTOM);
+    }
+
