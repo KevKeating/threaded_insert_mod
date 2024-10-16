@@ -14,10 +14,10 @@ default_center_depth_ratio = 0.23;
 bottom_thickness = 1;
 spacing = 4;
 rounding = 0.75;
-extra_block_size = 2;
-label_y = 0;
-label_font = "Bahnschrift Condensed";
-label_size = 4;
+extra_block_size = 1;
+label_y = -8.5;
+label_font = "Bahnschrift";
+label_size = 2.5;
 
 function Tip(name,
              knurling_diameter,
@@ -74,8 +74,6 @@ label_x_offsets = [
          cum_sum = cum_sum + struct_val(tip_info[i], KNURLING_DIAMETER) + spacing,
             i = i + 1)
     cum_sum];
-// echo(x_offsets=x_offsets);
-// echo(label_x_offsets=label_x_offsets);
 
 module tip_cylinders() {
     for (i = [0:num_tips - 1]) {
@@ -118,7 +116,7 @@ module labels() {
         label_text = struct_val(tip_info[i], NAME);
         cur_x_offset = label_x_offsets[i];
         translate([cur_x_offset, label_y])
-            text3d(label_text, h=0.5, spin=90, atype="ycenter", font=label_font, size=label_size, anchor=RIGHT + BOTTOM);
+            text3d(label_text, h=0.5, spin=90, atype="ycenter", font=label_font, size=label_size, anchor=LEFT + BOTTOM);
     }
 }
 
@@ -133,4 +131,3 @@ difference() {
 }
 color("white")
     labels();
-// TODO: add labels - do it here so we can use a lazy union and have a separate object
