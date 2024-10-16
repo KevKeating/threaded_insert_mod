@@ -118,13 +118,11 @@ module labels() {
         translate([cur_x_offset, label_y])
             text3d(label_text, h=0.5, spin=90, atype="ycenter", font=label_font, size=label_size, anchor=LEFT + BOTTOM);
     }
-    // TODO: cylinder for larger decimal point?
-}
-
 
 difference() {
     translate([-350, 0, 0])
         import("Tools Container.stl", convexity=10, $fn=$fn);
+    // remove two of the short tip holders to make room for threaded insert holders
     translate([132, -3.58, 9.615])
         cuboid([80, 32.25, 15], rounding=3, edges=BACK + RIGHT);
 }
@@ -144,6 +142,10 @@ translate([80.5, 12.5, 9.5])
 translate([80.5, 12.5, 9.5])
     color("black") {
         labels();
+        // the decimal point is small enough that Bambu Studio ignores it when
+        // using the default settings with a 0.4 mm nozzle.  To fix that, we
+        // manually add a slightly-larger-than-the-decimal-point cylinder over
+        // the decimal point.
         translate([16.5, -3.55, 0])
             cyl(r=0.5, h=0.5, anchor=BOTTOM);
     }
