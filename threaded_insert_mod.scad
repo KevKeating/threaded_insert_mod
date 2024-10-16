@@ -15,6 +15,9 @@ bottom_thickness = 1;
 spacing = 4;
 rounding = 0.75;
 extra_block_size = 2;
+label_y = 0;
+label_font = "Bahnschrift Condensed";
+label_size = 4;
 
 function Tip(name,
              knurling_diameter,
@@ -64,6 +67,15 @@ x_offsets = [
             cum_sum = cum_sum + spacing + struct_val(tip_info[i-1], KNURLING_DIAMETER) / 2 + struct_val(tip_info[i], KNURLING_DIAMETER, 0) / 2)
     cum_sum];
 total_width = x_offsets[num_tips - 1] + struct_val(tip_info[num_tips - 1], KNURLING_DIAMETER) / 2 + spacing;
+label_x_offsets = [
+    for (i=0,
+            cum_sum=spacing / 2;
+         i < num_tips;
+         cum_sum = cum_sum + struct_val(tip_info[i], KNURLING_DIAMETER) + spacing,
+            i = i + 1)
+    cum_sum];
+// echo(x_offsets=x_offsets);
+// echo(label_x_offsets=label_x_offsets);
 
 module tip_cylinders() {
     for (i = [0:num_tips - 1]) {
@@ -101,6 +113,15 @@ module tip_cylinders() {
     }
 }
 
+module labels() {
+    for (i = [0:num_tips - 1]) {
+        label_text = struct_val(tip_info[i], NAME);
+        cur_x_offset = label_x_offsets[i];
+        translate([cur_x_offset, label_y])
+            text3d(label_text, h=0.5, spin=90, atype="ycenter", font=label_font, size=label_size, anchor=RIGHT + BOTTOM);
+    }
+}
+
 difference() {
     back(extra_block_size)
         cuboid(
@@ -110,4 +131,6 @@ difference() {
             anchor=TOP + BACK + LEFT);
     tip_cylinders();
 }
+color("white")
+    labels();
 // TODO: add labels - do it here so we can use a lazy union and have a separate object
