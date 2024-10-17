@@ -118,6 +118,7 @@ module labels() {
         translate([cur_x_offset, label_y])
             text3d(label_text, h=0.5, spin=90, atype="ycenter", font=label_font, size=label_size, anchor=LEFT + BOTTOM);
     }
+}
 
 difference() {
     translate([-350, 0, 0])
@@ -126,7 +127,9 @@ difference() {
     translate([132, -3.58, 9.615])
         cuboid([80, 32.25, 15], rounding=3, edges=BACK + RIGHT);
 }
-translate([80.5, 12.5, 9.5])
+
+tip_holder_translation = [80.5, 12.5, 9.5];
+translate(tip_holder_translation)
     diff() {
         back(extra_block_size)
             cuboid(
@@ -139,7 +142,7 @@ translate([80.5, 12.5, 9.5])
         tag("remove")
             tip_cylinders();
     }
-translate([80.5, 12.5, 9.5])
+translate(tip_holder_translation)
     color("black") {
         labels();
         // the decimal point is small enough that Bambu Studio ignores it when
@@ -149,4 +152,3 @@ translate([80.5, 12.5, 9.5])
         translate([16.5, -3.55, 0])
             cyl(r=0.5, h=0.5, anchor=BOTTOM);
     }
-
