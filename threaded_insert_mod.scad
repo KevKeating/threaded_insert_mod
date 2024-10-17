@@ -37,8 +37,8 @@ function Tip(name,
             ]);
 
 tip_info = [
-    Tip("M2", 7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=1),
-    Tip("M2.5", 7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=1),
+    Tip("M2", 7, 3.2, knurling_diameter_clearance=0.25, knurling_height_clearance=0.9),
+    Tip("M2.5", 7, 3.2, knurling_diameter_clearance=0.25, knurling_height_clearance=0.9),
     Tip("M3", 7, 4.7, knurling_diameter_clearance=0.225, knurling_height_clearance=0.85),
     Tip("M4", 7, 5.6),
     Tip("M5", 7, 6.4, above_knurling_diameter_clearance=0.2),
@@ -120,13 +120,13 @@ module labels() {
     }
 }
 
-// difference() {
-//     translate([-350, 0, 0])
-//         import("Tools Container.stl", convexity=10, $fn=$fn);
-//     // remove two of the short tip holders to make room for threaded insert holders
-//     translate([132, -3.58, 9.615])
-//         cuboid([80, 32.25, 15], rounding=3, edges=BACK + RIGHT);
-// }
+difference() {
+    translate([-350, 0, 0])
+        import("Tools Container.stl", convexity=10, $fn=$fn);
+    // remove two of the short tip holders to make room for threaded insert holders
+    translate([132, -3.58, 9.615])
+        cuboid([80, 32.25, 15], rounding=3, edges=BACK + RIGHT);
+}
 
 tip_holder_translation = [80.5, 10, 9.5];
 // tip_holder_translation = [0, 0, 0];
@@ -138,28 +138,28 @@ translate(tip_holder_translation)
                 rounding=rounding,
                 edges=[LEFT + FRONT + TOP, RIGHT + FRONT + TOP],
                 anchor=TOP + BACK + LEFT)
-                // edge_mask(BACK + RIGHT)
-                //     rounding_edge_mask(l=$parent_size.z+EXTRA, r=5);
-                {
-                    position(BACK + BOTTOM)
-                        cuboid([total_width, 1.4, 15], anchor=BOTTOM + FRONT);
-                    back(0.7)
-                        position(RIGHT + BOTTOM)
-                        cuboid([1.4, $parent_size.y + 1.4, 15], anchor=BOTTOM + LEFT);
-                    back(0.7)
-                        position(LEFT + BOTTOM)
-                        cuboid([1.4, $parent_size.y + 1.4, 15], anchor=BOTTOM + RIGHT);
-                }
+                edge_mask(BACK + RIGHT)
+                    rounding_edge_mask(l=$parent_size.z+EXTRA, r=5);
+                // {
+                //     position(BACK + BOTTOM)
+                //         cuboid([total_width, 1.4, 15], anchor=BOTTOM + FRONT);
+                //     back(0.7)
+                //         position(RIGHT + BOTTOM)
+                //         cuboid([1.4, $parent_size.y + 1.4, 15], anchor=BOTTOM + LEFT);
+                //     back(0.7)
+                //         position(LEFT + BOTTOM)
+                //         cuboid([1.4, $parent_size.y + 1.4, 15], anchor=BOTTOM + RIGHT);
+                // }
         tag("remove")
             tip_cylinders();
     }
-// translate(tip_holder_translation)
-//     color("black") {
-//         labels();
-//         // the decimal point is small enough that Bambu Studio ignores it when
-//         // using the default settings with a 0.4 mm nozzle.  To fix that, we
-//         // manually add a slightly-larger-than-the-decimal-point cylinder over
-//         // the decimal point.
-//         translate([16.5, -3.55, 0])
-//             cyl(r=0.5, h=0.5, anchor=BOTTOM);
-//     }
+translate(tip_holder_translation)
+    color("black") {
+        labels();
+        // the decimal point is small enough that Bambu Studio ignores it when
+        // using the default settings with a 0.4 mm nozzle.  To fix that, we
+        // manually add a slightly-larger-than-the-decimal-point cylinder over
+        // the decimal point.
+        translate([16.5, -3.55, 0])
+            cyl(r=0.5, h=0.5, anchor=BOTTOM);
+    }
