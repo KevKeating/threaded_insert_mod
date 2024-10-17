@@ -120,12 +120,17 @@ module labels() {
     }
 }
 
-difference() {
-    translate([-350, 0, 0])
-        import("Tools Container.stl", convexity=10, $fn=$fn);
-    // remove two of the short tip holders to make room for threaded insert holders
-    translate([132, -3.58, 9.615])
-        cuboid([80, 32.25, 15], rounding=3, edges=BACK + RIGHT);
+union() {
+    difference() {
+        translate([-350, 0, 0])
+            import("Tools Container.stl", convexity=10, $fn=$fn);
+        // remove two of the short tip holders to make room for threaded insert holders
+        translate([132, -3.58, 9.615])
+            cuboid([80, 32.25, 15], rounding=3, edges=BACK + RIGHT);
+    }
+    // add a small bar to help hold the holder in place
+    translate([55.5, -18, 2.1])
+        cuboid([1, 16, 0.4], chamfer=0.2, edges=TOP, anchor=BOTTOM);
 }
 
 tip_holder_translation = [80.5, 11.1, 9.5];
