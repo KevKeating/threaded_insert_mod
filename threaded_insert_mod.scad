@@ -124,8 +124,11 @@ difference() {
     translate([-350, 0, 0])
         import("Tools Container.stl", convexity=10, $fn=$fn);
     // remove two of the short tip holders to make room for threaded insert holders
-    translate([132, -3.58, 9.615])
-        cuboid([80, 32.25, 15], rounding=3, edges=BACK + RIGHT);
+    translate([132, -31.4, 9.615])
+        diff()
+            cuboid([80, 32.25, 15], rounding=3, edges=FRONT + RIGHT)
+                edge_mask(FRONT + BOTTOM)
+                    chamfer_edge_mask(l=$parent_size.x + EXTRA, chamfer=2);
 }
 
 tip_holder_translation = [80.5, 12.5, 9.5];
