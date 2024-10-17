@@ -37,8 +37,8 @@ function Tip(name,
             ]);
 
 tip_info = [
-    Tip("M2", 7, 3.2, knurling_diameter_clearance=0.25, knurling_height_clearance=0.9),
-    Tip("M2.5", 7, 3.2, knurling_diameter_clearance=0.25, knurling_height_clearance=0.9),
+    Tip("M2", 7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=0.9),
+    Tip("M2.5", 7, 3.2, knurling_diameter_clearance=0.3, knurling_height_clearance=0.9),
     Tip("M3", 7, 4.7, knurling_diameter_clearance=0.225, knurling_height_clearance=0.85),
     Tip("M4", 7, 5.6),
     Tip("M5", 7, 6.4, above_knurling_diameter_clearance=0.2),
