@@ -120,6 +120,7 @@ module labels() {
     }
 }
 
+// import and modify the insert from https://www.printables.com/model/410086-pinecil-v2-short-tips-case
 union() {
     difference() {
         translate([-350, 0, 0])
@@ -133,8 +134,8 @@ union() {
         cuboid([1, 16, 0.4], chamfer=0.2, edges=TOP, anchor=BOTTOM);
 }
 
+// create the threaded insert holders
 tip_holder_translation = [80.5, 11.1, 9.5];
-// tip_holder_translation = [0, 0, 0];
 translate(tip_holder_translation)
     diff() {
         back(extra_block_size)
@@ -145,6 +146,9 @@ translate(tip_holder_translation)
                 anchor=TOP + BACK + LEFT)
                 edge_mask(BACK + RIGHT)
                     rounding_edge_mask(l=$parent_size.z+EXTRA, r=5);
+                // uncomment this block when doing a test print to add walls to
+                // the test print, since the walls can make it impossible to get
+                // the tips out if they're too close to the holders
                 // {
                 //     position(BACK + BOTTOM)
                 //         cuboid([total_width, 1.4, 15], anchor=BOTTOM + FRONT);
@@ -158,6 +162,10 @@ translate(tip_holder_translation)
         tag("remove")
             tip_cylinders();
     }
+
+// Add the labels.  We use a separate translate block here so that a lazy union
+// export to 3MF will keep the labels separate from the holders, which allows us
+// to print them in a different color
 translate(tip_holder_translation)
     color("black") {
         labels();
